@@ -1,0 +1,26 @@
+{% extends 'quiz/adminbase.html' %}
+{% block content %}
+{%load static%}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+{% if submitted %}
+<center>
+<h1>Succesfully created exam</h1>
+</center>
+{% else %}
+<center>
+    <form method=POST>
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+    <button type="submit"> submit</button>
+
+    </form>
+</center>
+{% endif %}
+
+
+{% endblock content %}

@@ -1,0 +1,80 @@
+{% extends 'student/studentbase.html' %}
+{% block content %}
+{%load static%}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div>
+<br>
+ <h5>
+     <a>Time left : <a id="dmin">{{ min }}</a> mins <a id="dsec">{{ sec }}</a> seconds</a>
+ </h5>
+<form class="form" id="examform"   action="/student/calculate-marks" method="POST" onsubmit="return saveAns()">
+ {% csrf_token %}
+    {% for q in questions %}
+    <input type="hidden" name="csrfmiddlewaretoken" value="C24rUotmdHawVQJL3KrqiWxvti8UffOFYUc8TRbZtLt36AVLdP3jbkzUVe3beRAa">
+    <strong><b>{{ forloop.counter }}.{{ q.question}}</b></strong>
+        <ol>
+            <li><input type="radio" id="{{q.option1}}" name="{{ forloop.counter }}" value="Option1"><label for="option1">{{q.option1}}</label></li>
+            <li><input type="radio" id="{{q.option2}}" name="{{ forloop.counter }}" value="Option2"><label for="option2">{{q.option2}}</label></li>
+            <li><input type="radio" id="{{q.option3}}" name="{{ forloop.counter }}" value="Option3" ><label for="option3">{{q.option3}}</label></li>
+            <li><input type="radio" id="{{q.option4}}" name="{{ forloop.counter }}" value="Option4"><label for="option4">{{q.option4}}</label></li>
+            <li>{{q.answer}}</li>
+        </ol>
+    <hr>
+    {% endfor %}
+
+        <hr>
+            <input type="submit" value="Submit">
+    </form>
+<script type="text/javascript">
+        window.onbeforeunload = function() { return "Your work will be lost."; };
+        var milisec = 0;
+        var seconds = 00
+        var minutes = {{exam.timer}}
+        function display() {
+            if (minutes == 0 && seconds == 0) {
+                saveAns()
+                window.onbeforeunload = undefined
+                document.getElementById("examform").submit();
+
+                            }
+            if (seconds == 0) {
+                minutes = minutes - 1
+                seconds = 60
+            }
+            seconds -= 1
+            document.getElementById("dsec").innerHTML = seconds
+            document.getElementById("dmin").innerHTML = minutes
+            setTimeout("display()", 1000)
+        }
+
+        display()
+
+        function saveAns(){
+        var ele = document.getElementsByTagName('input');
+        for(i = 0; i < ele.length; i++) {
+            if(ele[i].type="radio") {
+                if(ele[i].checked==true){
+                  setCookie(ele[i].name,ele[i].value,3)
+                }
+            }
+        }
+      }
+        function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+    </script>
+    </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+{% endblock content %}

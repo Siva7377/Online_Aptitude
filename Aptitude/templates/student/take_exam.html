@@ -1,0 +1,70 @@
+{% extends 'student/studentbase.html' %}
+{% block content %}
+{%load static%}
+{% load tz %}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+</head>
+<br><br>
+<div class="container my-4">
+    <div class="jumbotron">
+
+        {% if k == 0 %}
+	      <h3 class="text-info text-center">Exam Details</h3>
+
+        <div class="row">
+
+            <div class="card border-info mx-4 my-4">
+                <div class="card-body text-info">
+
+                    <h4 class="card-title">Exam Details :</h4>
+                    <p class="card-text">
+                        </p><ul style="list-style:decimal;">
+                            <li>Exam Name : {{exam.Exam_name}}</li>
+                            <li>Total Question : {{total_questions}}</li>
+                            <li>Total Marks : {{total_marks}}</li>
+                            <li>Total Time : {{exam.timer}}:00 Minutes</li>
+                            <li>Current time :{{ time }}</li>
+                            <li>Exam Start time : {{ exam.startdate }}</li>
+<!--                                <li>Time p:{{ time }} </li>-->
+<!--                            {% for i in results %}-->
+<!--                                <li>{{ i.student_id }}</li>-->
+<!--                            {% endfor %}-->
+<!--                            <li>Examid : {{ exam.id }}</li>-->
+<!--                            <li>{{k}}</li>-->
+                        </ul>
+                    <p></p>
+
+                    <h4 class="card-title">Rules :</h4>
+                    <p class="card-text">
+                        </p><ul style="list-style:decimal;">
+                            <li>All questions are multiple choice question.</li>
+                            <li>Only one choice is correct.</li>
+                            <li>Every question carry 1 mark</li>
+                            <li>Once you will start exam don`t refresh the page</li>
+                            <li>Try to answer as quickly as you can.</li>
+                        </ul>
+                    <br>
+                    {% if enable %}
+                    <center>
+                        <button class="btn btn-secondary"><a href="{% url 'start-exam' exam.id  %}"><h3>Start Exam</h3></a> </button>
+                    </center>
+                    {% else %}
+                    <center><h3>Exam start at {{exam.startdate}}</h3></center>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <h1>Exam already taken</h1>
+{% endif %}
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+{% endblock content %}
